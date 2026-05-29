@@ -14,7 +14,7 @@ test('authenticated user can create device for own company', function () {
 
     $response = $this->actingAs($user)->post(route('devices.store'), [
         'name' => 'Front Door Lock',
-        'device_id' => 'LOCK-001',
+        'device_serial' => 'LOCK-001',
         'type' => 'doorlock',
         'company_id' => $company->id,
     ]);
@@ -23,7 +23,7 @@ test('authenticated user can create device for own company', function () {
 
     $this->assertDatabaseHas('devices', [
         'name' => 'Front Door Lock',
-        'device_id' => 'LOCK-001',
+        'device_serial' => 'LOCK-001',
         'type' => 'doorlock',
         'company_id' => $company->id,
     ]);
@@ -40,14 +40,14 @@ test('user cannot create device for another users company', function () {
 
     $response = $this->actingAs($attacker)->post(route('devices.store'), [
         'name' => 'Spy Cam',
-        'device_id' => 'CAM-001',
+        'device_serial' => 'CAM-001',
         'type' => 'camera',
         'company_id' => $company->id,
     ]);
 
     $response->assertSessionHasErrors('company_id');
 
-    expect(Device::query()->where('device_id', 'CAM-001')->exists())->toBeFalse();
+    expect(Device::query()->where('device_serial', 'CAM-001')->exists())->toBeFalse();
 });
 
 test('authenticated user can update own device', function () {
@@ -60,14 +60,14 @@ test('authenticated user can update own device', function () {
 
     $device = Device::query()->create([
         'name' => 'Old Device',
-        'device_id' => 'OLD-001',
+        'device_serial' => 'OLD-001',
         'type' => 'doorlock',
         'company_id' => $company->id,
     ]);
 
     $response = $this->actingAs($user)->patch(route('devices.update', $device), [
         'name' => 'Updated Device',
-        'device_id' => 'UPD-001',
+        'device_serial' => 'UPD-001',
         'type' => 'camera',
         'company_id' => $company->id,
     ]);
@@ -77,7 +77,7 @@ test('authenticated user can update own device', function () {
     $this->assertDatabaseHas('devices', [
         'id' => $device->id,
         'name' => 'Updated Device',
-        'device_id' => 'UPD-001',
+        'device_serial' => 'UPD-001',
         'type' => 'camera',
     ]);
 });
@@ -92,7 +92,7 @@ test('authenticated user can delete own device', function () {
 
     $device = Device::query()->create([
         'name' => 'Delete Device',
-        'device_id' => 'DEL-001',
+        'device_serial' => 'DEL-001',
         'type' => 'doorlock',
         'company_id' => $company->id,
     ]);
@@ -117,14 +117,14 @@ test('user cannot update another users device', function () {
 
     $device = Device::query()->create([
         'name' => 'Protected Device',
-        'device_id' => 'PRO-001',
+        'device_serial' => 'PRO-001',
         'type' => 'camera',
         'company_id' => $company->id,
     ]);
 
     $response = $this->actingAs($attacker)->patch(route('devices.update', $device), [
         'name' => 'Hacked Device',
-        'device_id' => 'HK-001',
+        'device_serial' => 'HK-001',
         'type' => 'doorlock',
         'company_id' => $company->id,
     ]);
@@ -134,7 +134,7 @@ test('user cannot update another users device', function () {
     $this->assertDatabaseHas('devices', [
         'id' => $device->id,
         'name' => 'Protected Device',
-        'device_id' => 'PRO-001',
+        'device_serial' => 'PRO-001',
     ]);
 });
 
@@ -149,7 +149,7 @@ test('user cannot delete another users device', function () {
 
     $device = Device::query()->create([
         'name' => 'Protected Device',
-        'device_id' => 'PRO-DELETE-001',
+        'device_serial' => 'PRO-DELETE-001',
         'type' => 'camera',
         'company_id' => $company->id,
     ]);
@@ -160,6 +160,6 @@ test('user cannot delete another users device', function () {
 
     $this->assertDatabaseHas('devices', [
         'id' => $device->id,
-        'device_id' => 'PRO-DELETE-001',
+        'device_serial' => 'PRO-DELETE-001',
     ]);
 });

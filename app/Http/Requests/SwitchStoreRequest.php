@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Company;
-use Illuminate\Contracts\Validation\ValidationRule;
+use App\Models\Device;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class DeviceStoreRequest extends FormRequest
+class SwitchStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,16 +24,12 @@ class DeviceStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'device_serial' => ['required', 'string', 'max:255'],
-            'device_token' => ['required', 'string', 'max:255'],
-            'company_id' => [
+            'device_serial' => [
                 'required',
-                'integer',
-                Rule::exists(Company::class, 'id')->where(function ($query) {
-                    $query->where('user_id', $this->user()->id);
-                }),
+                'string',
+                Rule::exists('devices', 'device_serial')->where('type', 'switch'),
             ],
+            'speed' => ['required', 'integer', 'min:0', 'max:100'],
         ];
     }
 }

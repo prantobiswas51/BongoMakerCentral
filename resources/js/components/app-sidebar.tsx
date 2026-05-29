@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, Fingerprint, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, Fingerprint, Folder, LayoutGrid, SlidersHorizontal } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -12,7 +12,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard, switches } from '@/routes';
 import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
 
@@ -26,6 +26,11 @@ const mainNavItems: NavItem[] = [
         title: 'Fingerprints',
         href: '/fingerprints',
         icon: Fingerprint,
+    },
+    {
+        title: 'Switch',
+        href: switches.url(),
+        icon: SlidersHorizontal,
     },
 ];
 

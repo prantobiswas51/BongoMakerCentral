@@ -2,8 +2,8 @@ import { Link, usePage } from '@inertiajs/react'
 import type { ReactNode } from 'react'
 import AppLogoIcon from '@/components/app-logo-icon'
 
-import { Building, Camera, Computer, DoorOpen, FileText, LayoutDashboard, Lock, User, Users } from 'lucide-react'
-import { dashboard, doorlocks, cameras, users, logout, company, devices, members } from '@/routes'
+import { Building, Camera, Computer, DoorOpen, FileText, LayoutDashboard, Lock, SlidersHorizontal, User, Users } from 'lucide-react'
+import { dashboard, doorlocks, cameras, users, logout, company, devices, members, switches } from '@/routes'
 
 type Props = {
     children: ReactNode
@@ -77,6 +77,17 @@ export default function MainLayout({ children }: Props) {
                         <span className="flex items-center gap-2">
                             <Computer className="h-4 w-4" />
                             Devices
+                        </span>
+                    </Link>
+
+                    <Link
+                        href={switches.url()}
+                        className={`px-4 py-2 text-sm rounded-lg transition ${isActive(switches.url()) ? 'bg-sky-700' : 'hover:bg-sky-800'
+                            }`}
+                    >
+                        <span className="flex items-center gap-2">
+                            <SlidersHorizontal className="h-4 w-4" />
+                            Switch
                         </span>
                     </Link>
 

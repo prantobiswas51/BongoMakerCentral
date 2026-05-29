@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DoorlockController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\SwitchController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -33,6 +34,10 @@ Route::get('doorlocks', [DoorlockController::class, 'index'])->name('doorlocks')
 
 // Camera controller
 Route::get('cameras', [CameraController::class, 'index'])->name('cameras');
+
+// Switch controller
+Route::get('switches', [SwitchController::class, 'index'])->name('switches');
+Route::post('switches', [SwitchController::class, 'store'])->name('switches.store');
 
 // users controller
 Route::get('users', [DashboardController::class, 'index'])->name('users');

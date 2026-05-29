@@ -25,7 +25,7 @@ class DeviceController extends Controller
             })
             ->with('company:id,name')
             ->latest()
-            ->get(['id', 'name', 'device_id', 'type', 'company_id']);
+            ->get(['id', 'name', 'device_serial', 'company_id']);
 
         return Inertia::render('devices', [
             'companies' => $companies,
@@ -35,7 +35,21 @@ class DeviceController extends Controller
 
     public function store(DeviceStoreRequest $request): RedirectResponse
     {
-        Device::query()->create($request->validated());
+        $data = $request->validated();
+
+        $device = Device::query()
+            ->where('device_serial', $data['device_serial'])
+            ->where('device_token', $data['device_token'])
+            ->first();
+
+        if (! $device) {
+            return back()->withErrors(['device_serial' => 'Device id or secret is incorrect']);
+        }
+
+        // ensure the company belongs to the current user (validated in request rule)
+        $device->name = $data['name'];
+        $device->company_id = $data['company_id'];
+        $device->save();
 
         return back();
     }

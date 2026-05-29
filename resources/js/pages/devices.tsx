@@ -22,8 +22,7 @@ type Company = {
 type Device = {
     id: number
     name: string
-    device_id: string
-    type: 'doorlock' | 'camera'
+    device_serial: string
     company_id: number
     company: {
         id: number
@@ -51,8 +50,8 @@ export default function Devices({ companies, devices }: DevicesProps) {
         clearErrors,
     } = useForm({
         name: '',
-        device_id: '',
-        type: 'doorlock',
+        device_serial: '',
+        device_token: '',
         company_id: companies[0]?.id?.toString() ?? '',
     })
 
@@ -62,8 +61,8 @@ export default function Devices({ companies, devices }: DevicesProps) {
         post('/devices', {
             preserveScroll: true,
             onSuccess: () => {
-                reset('name', 'device_id')
-                setData('type', 'doorlock')
+                reset('name', 'device_serial')
+                setData('device_token', '')
                 setData('company_id', companies[0]?.id?.toString() ?? '')
                 setIsCreateDialogOpen(false)
             },
@@ -74,16 +73,16 @@ export default function Devices({ companies, devices }: DevicesProps) {
         clearErrors()
         setEditingDeviceId(device.id)
         setData('name', device.name)
-        setData('device_id', device.device_id)
-        setData('type', device.type)
+        setData('device_serial', device.device_serial)
+        setData('device_token', '')
         setData('company_id', device.company_id.toString())
     }
 
     const cancelEdit = () => {
         clearErrors()
         setEditingDeviceId(null)
-        reset('name', 'device_id')
-        setData('type', 'doorlock')
+        reset('name', 'device_serial')
+        setData('device_token', '')
         setData('company_id', companies[0]?.id?.toString() ?? '')
     }
 
@@ -130,23 +129,19 @@ export default function Devices({ companies, devices }: DevicesProps) {
 
                             <div>
                                 <Input
-                                    value={data.device_id}
-                                    onChange={(event) => setData('device_id', event.target.value)}
+                                    value={data.device_serial}
+                                    onChange={(event) => setData('device_serial', event.target.value)}
                                     placeholder="Device ID"
                                 />
-                                <InputError message={errors.device_id} className="mt-1" />
+                                <InputError message={errors.device_serial} className="mt-1" />
                             </div>
-
                             <div>
-                                <select
-                                    value={data.type}
-                                    onChange={(event) => setData('type', event.target.value)}
-                                    className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
-                                >
-                                    <option value="doorlock">Doorlock</option>
-                                    <option value="camera">Camera</option>
-                                </select>
-                                <InputError message={errors.type} className="mt-1" />
+                                <Input
+                                    value={data.device_token}
+                                    onChange={(event) => setData('device_token', event.target.value)}
+                                    placeholder="Enter Secret key"
+                                />
+                                <InputError message={errors.device_token} className="mt-1" />
                             </div>
 
                             <div>
@@ -198,22 +193,12 @@ export default function Devices({ companies, devices }: DevicesProps) {
                                     <InputError message={errors.name} />
 
                                     <Input
-                                        value={data.device_id}
-                                        onChange={(event) => setData('device_id', event.target.value)}
+                                        value={data.device_serial}
+                                        onChange={(event) => setData('device_serial', event.target.value)}
                                         placeholder="Device ID"
                                         className="text-sm"
                                     />
-                                    <InputError message={errors.device_id} />
-
-                                    <select
-                                        value={data.type}
-                                        onChange={(event) => setData('type', event.target.value)}
-                                        className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
-                                    >
-                                        <option value="doorlock">Doorlock</option>
-                                        <option value="camera">Camera</option>
-                                    </select>
-                                    <InputError message={errors.type} />
+                                    <InputError message={errors.device_serial} />
 
                                     <select
                                         value={data.company_id}
@@ -258,12 +243,11 @@ export default function Devices({ companies, devices }: DevicesProps) {
                                             <h2 className="text-base font-semibold text-gray-800 truncate">
                                                 {device.name}
                                             </h2>
-                                            <p className="text-xs text-gray-500">{device.device_id}</p>
+                                            <p className="text-xs text-gray-500">{device.device_serial}</p>
                                         </div>
                                     </div>
 
                                     <div className="mb-3 text-xs text-gray-600 space-y-1">
-                                        <p>Type: {device.type}</p>
                                         <p>Company: {device.company.name}</p>
                                     </div>
 

@@ -29,13 +29,13 @@ class DeviceUpdateRequest extends FormRequest
 
         return [
             'name' => ['required', 'string', 'max:255'],
-            'device_id' => [
+            'device_serial' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('devices', 'device_id')->ignore($device->id),
+                Rule::unique('devices', 'device_serial')->ignore($device->id),
             ],
-            'type' => ['required', Rule::in(['doorlock', 'camera'])],
+            // type removed - not editable via UI
             'company_id' => [
                 'required',
                 'integer',

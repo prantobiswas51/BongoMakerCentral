@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('devices', function (Blueprint $table) {
+        Schema::create('switches', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
             $table->string('device_serial')->unique();
-            $table->string('device_token')->unique();
-            $table->enum('type', ['doorlock', 'camera', 'switch']);
-            $table->foreignId('company_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->unsignedInteger('speed')->default(0);
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('devices');
+        Schema::dropIfExists('switches');
     }
 };
