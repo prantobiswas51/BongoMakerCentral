@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('device_id')->unique();
-            $table->enum('type', ['doorlock', 'camera']);
+            $table->string('device_token')->unique();
+            $table->enum('type', ['doorlock', 'camera', 'switch']);
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
