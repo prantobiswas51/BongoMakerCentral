@@ -35,4 +35,16 @@ return [
         ],
     ],
 
+    'mqtt' => [
+        'enabled' => env('MQTT_ENABLED', true),
+        'command' => env('MQTT_PUB_COMMAND', 'mosquitto_pub'),
+        'host' => env('MQTT_HOST', '127.0.0.1'),
+        'port' => env('MQTT_PORT', 1883),
+        'username' => env('MQTT_USERNAME'),
+        'password' => env('MQTT_PASSWORD'),
+        'topic_prefix' => env('MQTT_TOPIC_PREFIX', 'devices'),
+        'retain' => env('MQTT_RETAIN', false),
+        'timeout' => env('MQTT_TIMEOUT', 5),
+    ],
+
 ];

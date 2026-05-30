@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SwitchStoreRequest;
 use App\Models\Device;
 use App\Models\DeviceSwitch;
+use App\Services\MqttPublisher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -36,7 +37,7 @@ class SwitchController extends Controller
         ]);
     }
 
-    public function store(SwitchStoreRequest $request): RedirectResponse
+    public function store(SwitchStoreRequest $request, MqttPublisher $mqttPublisher): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -52,6 +53,8 @@ class SwitchController extends Controller
             ['device_serial' => $validated['device_serial']],
             ['speed' => $validated['speed']]
         );
+
+        $mqttPublisher->publishSwitchSpeed($device->device_serial, $validated['speed']);
 
         return back();
     }
